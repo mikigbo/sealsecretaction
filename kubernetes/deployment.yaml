@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-secrets-example
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-secrets-example
+  template:
+    metadata:
+      labels:
+        app: node-secrets-example
+    spec:
+      containers:
+        - name: node-app
+          image: mikigbo/node-secrets-example:v1.0.1
+          ports:
+            - containerPort: 3000
+          env:
+            - name: USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: my-plain-secret
+                  key: username
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-plain-secret
+                  key: password
